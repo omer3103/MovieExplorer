@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/movie.dart';
@@ -11,15 +12,23 @@ class ApiService {
   // TMDB API KEY
   // --------------------------------------------------
 
-  static const String _apiKey = '55f815937e450a751d388941f7fa4d8b';
+  String get _apiKey {
+    final key = dotenv.env['TMDB_API_KEY'];
+
+    if (key == null || key.trim().isEmpty) {
+      throw Exception(
+        'TMDB API key not found. Please check your .env file.',
+      );
+    }
+
+    return key;
+  }
 
   // --------------------------------------------------
   // Helper: GET request
   // --------------------------------------------------
 
-  Future<Map<String, dynamic>> _get(
-    String endpoint,
-  ) async {
+  Future<Map<String, dynamic>> _get(String endpoint) async {
     final response = await http.get(
       Uri.parse('$_baseUrl$endpoint'),
     );

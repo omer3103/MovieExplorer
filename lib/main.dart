@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'screens/home_screen.dart';
 import 'screens/search_screen.dart';
 import 'screens/favourite_screen.dart';
@@ -8,7 +8,8 @@ import 'services/favorites_service.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load saved favorites before starting the app.
+  await dotenv.load(fileName: '.env');
+
   await FavoritesService.instance.loadFavorites();
 
   runApp(const MovieExplorerApp());
